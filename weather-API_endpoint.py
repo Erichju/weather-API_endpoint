@@ -3,7 +3,7 @@ import bs4
 import pandas as pd
 
 # 建立一個 Request 物件
-url = "https://www.cwa.gov.tw/V8/C/W/Observe/MOD/24hr/46705.html"
+url = "https://www.cwa.gov.tw/V8/C/W/Observe/MOD/24hr/46705.html" # 資料測站為新屋氣象站(站點代碼:46705)，可自行更改測站ID
 request = req.Request(url)
 with req.urlopen(request) as response:
     data = response.read().decode("utf-8")
@@ -19,7 +19,7 @@ selected_columns = ["日期時間", "溫度", "天氣", "風向", "風力", "陣
 weather_data = []
 for row in Wdata[0:]:
     date_time = row.find("th", {"class": "is_show"}).text.strip()
-    # weather_icon2word = row.find("td", {"headers": "weather", "class": "is_show"}).find("img")["alt"]     # 將圖標轉為文字敘述，如果遇到氣象站資料缺值則會跳錯誤(1/19發現)
+    # weather_icon2word = row.find("td", {"headers": "weather", "class": "is_show"}).find("img")["alt"]     # 將圖標轉為文字敘述，如果遇到氣象站資料缺值則會跳錯誤(2024/1/19)
     values = [date_time] + [value.text.strip() for value in row.find_all("td")]
     # values[2] = weather_icon2word
     row_data = dict(zip(selected_columns, values))
